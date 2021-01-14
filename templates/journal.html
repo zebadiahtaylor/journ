@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+<!-- TODO add sorting by tag -->
+use date|time as a <h2>
+    text as <p> -->
+    {% block main %}
+    {% for key,value in entry_info.items() %}
+        <h6><strong>{{value[0]}} |</strong> {{value[1]}} | {{entry_tags[key]}}</h6>
+            <br>
+        <p>{{value[2]}}</p>
+            <br><strong>____</strong>
+    {% endfor %}
+
+{% endblock %}

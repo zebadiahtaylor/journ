@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+
+{% block main %}
+    <h3> your thoughts </h3>
+    <form action="/" method="post">
+        {% for tag in tags %}
+            {% if tag %}
+                <input type="checkbox" id="{{tag}}" name="{{tag}}">
+                <label for="{{tag}}">{{tag}}</label>
+            {% endif %}
+        {% endfor %}
+        <br>
+        <textarea autofocus id="entry" name="entry" type="text" maxlength="1000" resize:none rows="8" cols="69" width:80%></textarea>
+        <input type="submit">
+    </form>
+    
+{% endblock %}

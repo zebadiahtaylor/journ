@@ -1,0 +1,65 @@
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_name TEXT NOT NULL,
+    hash TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE tags (
+    user_id INTEGER PRIMARY KEY NOT NULL,
+    tag1 TEXT DEFAULT 'life',
+    tag2 TEXT,
+    tag3 TEXT,
+    tag4 TEXT,
+    tag5 TEXT,
+    tag6 TEXT,
+    tag7 TEXT,
+    tag8 TEXT
+);
+
+CREATE TABLE entries (
+    entry INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_id INTEGER NOT NULL, 
+    entry_url TEXT NOT NULL,
+    date NOT NULL DEFAULT CURRENT_DATE, 
+    time DEFAULT CURRENT_TIME,
+    tag1 TEXT,
+    tag2 TEXT,
+    tag3 TEXT,
+    tag4 TEXT,
+    tag5 TEXT,
+    tag6 TEXT,
+    tag7 TEXT,
+    tag8 TEXT
+);
+
+INSERT INTO users ('user_name', 'hash', 'email') VALUES ('z', '123', 'zebadiah.taylor@gmail.com');
+"INSERT into entries ('user_id', 'entry_url', {tag_column}) VALUES (?, ?, ?)", the_data
+
+)
+
+
+CREATE TABLE 'transactions' ( 'transaction' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id TEXT NOT NULL, symbol TEXT NOT NULL, shares NUMERIC NOT NULL, price NUMERIC NOT NULL, 
+date NOT NULL DEFAULT CURRENT_DATE, 'time' time DEFAULT CURRENT_TIME )
+CREATE TABLE 'users' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'username' TEXT NOT NULL, 'hash' TEXT NOT NULL, 'cash' NUMERIC NOT NULL DEFAULT 10000.00 )
+
+db.execute("INSERT INTO transactions (user_id, symbol, shares, price) VALUES (:user_id, :symbol, :shares, :price)",
+                                user_id=session["user_id"],
+                                symbol=request.form.get("symbol"),
+                                shares=-1*int(request.form.get("shares")),
+                                price=float(quoted["price"])
+                                )
+
+INSERT INTO users ('user_name', 'hash', 'email') VALUES ('z', '123', 'zebadiah.taylor@gmail.com');
+
+INSERT INTO tags ('user_id', 'tag4', 'tag2', 'tag3') VALUES ('2', 'sex', 'hikes', 'chores');
+INSERT INTO tags (tag=?) VALUES (newtag=?) WHERE user_id=?, tag6, sex, 2;
+
+info_inject = [which_tag, newtag, user_id]
+
+
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+
+SELECT entry_url FROM entries WHERE use_id=?

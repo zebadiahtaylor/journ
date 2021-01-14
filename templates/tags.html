@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+<!-- ADD SCRIPT TO ALERT USER IF THEY VIOLATED NAMING RULES -->
+
+{% block main %}
+
+    <!-- lists existing tags -->
+    <strong>tags: </strong>
+    {% for tag in tags %}
+        {% if tag %}
+            <a href="">  <strong>  / {{ tag }}  /</strong></a>
+        {% endif %}  
+    {% endfor %}
+    <br><br><br>
+
+    <!-- allow user to add a new tag -->
+    <form action="tags.html" method="post">
+        <input type="text" id="newtag" name="newtag" placeholder="add a tag">
+        <input type="submit">
+    </form>
+    <br><br><br>
+
+    <!-- allow user to update an existing tag -->
+    <form action='tags.html' method="post">
+        <select id="oldtag" name="oldtag">
+            <option value=None>or change a tag?</option>
+            {% for tag in tags %}
+                {% if tag %}
+                    <option value={{tag}}>{{ tag }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <input type="text" id="newertag" name="newertag" placeholder="new tag">
+        <br><br>
+        <!-- <input type="checkbox" id="replace_existing" name="replace_existing">
+        <label for="replace_existing">update tag on previous entries?</label> -->
+        <input type="submit">
+    </form>
+    
+
+{% endblock %}

@@ -1,0 +1,64 @@
+considerations
+    consider installing Flask-Babel for superior time-zone support
+    https://flask-babel.tkte.ch/
+
+    consider learning more about security considerations
+    https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+JOURN to do general
+
+    /index tags  ... use check boxes. allow user to make their own tags.
+    refresh w/ javascript?
+    figure out server-side storage
+    SQLITE
+    user-specific content
+    additional features:
+    
+    on website
+    in databases
+    search
+    BUILD A WAY TO ATTACH MULTIPLE TAGS 
+    user log_in information
+    use database to keep user preferences ('night mode', etc.)
+     1. (nonessent) javascript: alert user if naming conventions are violated:
+        letters a-z only and spaces only, no exceptions | must have at least 1 letter
+        minimum 1 letter. what maximum?
+    questions to ask: is using utc time a good way to create a unique identifier for a text file to prevent overwrites?
+
+todo:
+   1. debug: NULL IN DB NOT WORKING AS EXPECTED
+    File "C:\Users\zebad\Projects\journ\app.py", line 130, in tags
+    c.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id=?", db_info)
+sqlite3.OperationalError: near "=": syntax error
+
+
+    2. code for @route("tags.html")
+        c. if update previous entries?
+            +db update 
+                question: is giving user potential infinite tags problematic? 
+    3. code for index (entry)
+        a. take user input and create a document w/ unique title?
+                q. how do this? using user_id and 
+                q. entry_id is NOT auto-increment currently. what is max possible value for a database? 
+                q. how should we assign this?
+        b. record address for that document in database.
+    4. code for reading previous entries
+        a. retrieve unique document for display
+                a1. w/ option to edit. 
+            UPDATE APOLOGY
+    5. # todo clean up 
+        a. connections with more functions from helpers
+
+
+
+Pattern.fullmatch(string[, pos[, endpos]])
+If the whole string matches this regular expression, return a corresponding match object. Return None if the string does not match the pattern; note that this is different from a zero-length match.
+
+The optional pos and endpos parameters have the same meaning as for the search() method.
+
+>>>
+>>> pattern = re.compile("o[gh]")
+>>> pattern.fullmatch("dog")      # No match as "o" is not at the start of "dog".
+>>> pattern.fullmatch("ogre")     # No match as not the full string matches.
+>>> pattern.fullmatch("doggie", 1, 3)   # Matches within given limits.
+<re.Match object; span=(1, 3), match='og'>
+New in version 3.4.
