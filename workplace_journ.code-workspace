@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": ".vscode"
+		},
+		{
+			"path": "__pycache__"
+		},
+		{
+			"path": "entries"
+		},
+		{
+			"path": "env"
+		},
+		{
+			"path": "notes_n_code"
+		},
+		{
+			"path": "static"
+		},
+		{
+			"path": "templates"
+		}
+	]
+}
