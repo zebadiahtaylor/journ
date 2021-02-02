@@ -12,7 +12,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 
 app = Flask(__name__)
 
-db = connect_db("journ.db")
+# db = connect_db("journ.db")
 
 # for development only
 user_id = '1'
@@ -31,8 +31,8 @@ def after_request(response):
 # home page after login. | emphasizes ease of entry-writing
 @app.route("/", methods=["GET", "POST"])
 def home():
-    # retrieves user's tags data for use in either "POST" or "GET"
-    tags = current_tags(user_id)
+    # retrieves user's tags data for use in either "POST" or "GET", and all_tag_column_pairs (key = tag, value = column#)
+    tags, all_tag_column_pairs = current_tags(user_id)
     
     # user submits a post to be recorded
     if request.method == "POST":
@@ -40,7 +40,7 @@ def home():
         # a list of the user's selected tabs | currently, we only use 1
         selected_tabs = helpers.get_selected_tags(tags)
 
-        # rejects blank entry
+        # rejects blank entry   | move this to javascript on page. 
         if not request.form.get("entry"):
             return apology("No entry")
         
@@ -56,16 +56,13 @@ def home():
             with open(fr"entries\{entry_name}", "w") as entry_writer:
                 entry_writer.write(entry)
             
-            # a dict w/ tags (keys) and column names (values)
-            all_tag_columns = helpers.find_tag_columns(tags)
-
             # a list to put into SQL
             dataset = [user_id, entry_name, selected_tabs[0]]
 
             # stores the info in the database
             conn = connect_db("journ.db")
             c = conn.cursor()
-            c.execute(f"INSERT into entries ('user_id', 'entry_url', {all_tag_columns[selected_tabs[0]]}) VALUES (?, ?, ?)",
+            c.execute(f"INSERT into entries ('user_id', 'entry_url', {all_tag_column_pairs[selected_tabs[0]]}) VALUES (?, ?, ?)",
                         dataset)
             conn.commit()
             conn.close()
@@ -89,7 +86,7 @@ def tags():
      user may see and change current tag information
     """
     # retrieves user's tags data for use in either "POST" or "GET"
-    tags = current_tags(user_id)
+    tags, all_tag_column_pairs = current_tags(user_id)
 
     # user may alter their tag-related data. || future project upgrade: javascript alerts to prevent needless reloading.
     if request.method == "POST":

@@ -28,7 +28,10 @@ def connect_db(path):
         print("problem connecting with database")
     return connection
 
+# returns list of tags and dict w/ tags(keys) and columns (values)
 def current_tags(user_id):
+    
+    # finds current tags and returns tags []
     tags= []
     conn = connect_db("journ.db")
     dbtags = conn.execute("SELECT tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8 FROM tags WHERE user_id=?",
@@ -37,8 +40,17 @@ def current_tags(user_id):
     for row in dbtags:
         for item in row:
             tags.append(item)
+    print(f"the tags are: {tags}")
     conn.close()
-    return tags
+
+    # creates a dict w/ tags (keys) and columns (values)
+    all_tag_columns = {}
+    counter = 0
+    for tag in tags:
+        counter += 1
+        all_tag_columns[str(tag)] = "tag" + str(counter) 
+    print(all_tag_columns)
+    return tags, all_tag_columns
 
 # queries databases regarding users' entries and returns a pair of dictionaries. 
 def find_entry_info(user_id):
@@ -92,25 +104,15 @@ def find_tag_column(tags, oldtag):
             break
     return that_tag_column
 
-# creates a dict w/ tags (keys) and columns (values)
-def find_tag_columns(tags):
-    all_tag_columns = {}
-    counter = 0
-    for tag in tags:
-        counter += 1
-        all_tag_columns[str(tag)] = "tag" + str(counter) 
-    print(all_tag_columns)
-    return all_tag_columns
-
 # checks what tags are turned on
 def get_selected_tags(tags):
     users_tags = {}
     selected_tabs = []
     for tag in tags:
         users_tags[tag] = request.form.get(f"{tag}")
-    print(f"this is the users tags as a dict:__ {users_tags}")
+    print(f"this is the user's tags as a dict:__ {users_tags}")
     for tag in tags:
         if users_tags[tag]: 
             selected_tabs.append(tag)
-    print(f"these are the selected tabs as a list:__")
+    print(f"these are the selected tabs as a list:{selected_tabs}")
     return selected_tabs
