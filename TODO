@@ -4,9 +4,14 @@ considerations
 
     consider learning more about security considerations
     https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+
 JOURN to do general
 
-    /index tags  ... use check boxes. allow user to make their own tags.
+    DB TIMESTAMPS ARE COMPLETELY WRONG. 
+        EVENTUALLY GET THIS TO WORK BY TIMEZONE. 
+    Multiple tags
+    delete entries
+    order by tag options
     refresh w/ javascript?
     figure out server-side storage
     SQLITE
@@ -16,7 +21,6 @@ JOURN to do general
     on website
     in databases
     search
-    BUILD A WAY TO ATTACH MULTIPLE TAGS 
     user log_in information
     use database to keep user preferences ('night mode', etc.)
      1. (nonessent) javascript: alert user if naming conventions are violated:

@@ -2,6 +2,7 @@
 
 <html lang="en">
     <head>
+        <link href="statics.styles.css" rel="stylesheet">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="styles.css" rel="stylesheet">
         <title> journ </title>
@@ -9,44 +10,44 @@
         <meta charset="utf-8">
         <!-- meta name is used for search engines. -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="keywords" content="creative,creative writing,writing,publishing,journal,
-        journaling,personal,personal writing,diary,memory,tags,organization,organized, thoughts">
+        <meta name="keywords" content="journal,journaling,journ,diary, write, creative,creative writing,writing,publishing, 
+        personal,personal writing,memory,tags,organization,organized">
         <!-- jquery for javascript purposes -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="static/javascript.js"></script>
+        <style>
+            /*Adapted from w3schools examples, as are top navigation bars on other pages*/
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #333;
+                color:white;
+                }
+
+            li {
+                float: left;
+                }
+
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                }
+
+            li a:hover {
+                background-color: #111;
+                }
+
+            body {
+                background-color: #111;
+                color: white;
+            }
+        </style>
     </head>
-    <style>
-        /*This styles left-navigation bar*/
-        /*Adapted from w3schools examples, as are top navigation bars on other pages*/
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-            color:white;
-            }
-
-        li {
-            float: left;
-            }
-
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            }
-
-        li a:hover {
-            background-color: #111;
-            }
-
-        body {
-            background-color: #111;
-            color: white;
-        }
-    </style>
     <body>
         <ul>
             <li><a class="active" href="{{ url_for('home') }}">journ</a></li>

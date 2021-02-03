@@ -2,6 +2,7 @@
 from flask import render_template, request
 import sqlite3
 from sqlite3 import Error
+import time
 import urllib.parse
 
 def apology(message, code=400):
@@ -28,7 +29,10 @@ def connect_db(path):
         print("problem connecting with database")
     return connection
 
+# returns list of tags and dict w/ tags(keys) and columns (values)
 def current_tags(user_id):
+    
+    # finds current tags and returns tags []
     tags= []
     conn = connect_db("journ.db")
     dbtags = conn.execute("SELECT tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8 FROM tags WHERE user_id=?",
@@ -37,11 +41,23 @@ def current_tags(user_id):
     for row in dbtags:
         for item in row:
             tags.append(item)
+    print(f"the tags are: {tags}")
     conn.close()
+
     return tags
 
-# queries databases regarding users' entries and returns a pair of dictionaries. 
+def create_entry(user_id):
+    # uses username + utc microseconds to create unique name. TODO: improve for multiple simultaneous entries per user
+    entry_name = f"{user_id}_{time.time()}.txt"
+    entry = request.form.get("entry")
+    with open(fr"entries\{entry_name}", "w") as entry_writer:
+        entry_writer.write(entry)
+    return entry_name
+
 def find_entry_info(user_id):
+    """
+    Queries databases regarding users' entries and returns a pair of dictionaries.
+    """
     entry_info = {}
     entry_tags = {}
     conn = connect_db("journ.db")
@@ -92,14 +108,16 @@ def find_tag_column(tags, oldtag):
             break
     return that_tag_column
 
-# creates a dict w/ tags (keys) and columns (values)
-def find_tag_columns(tags):
+def find_tag_column_pairs(tags):
+    """
+    creates a dict w/ tags (keys) and columns (values)
+    """
     all_tag_columns = {}
     counter = 0
     for tag in tags:
         counter += 1
         all_tag_columns[str(tag)] = "tag" + str(counter) 
-    print(all_tag_columns)
+    print(f"all_tag_columns = {all_tag_columns}")
     return all_tag_columns
 
 # checks what tags are turned on
@@ -108,9 +126,36 @@ def get_selected_tags(tags):
     selected_tabs = []
     for tag in tags:
         users_tags[tag] = request.form.get(f"{tag}")
-    print(f"this is the users tags as a dict:__ {users_tags}")
+    print(f"selected tags as a dict:__ {users_tags}")
     for tag in tags:
         if users_tags[tag]: 
             selected_tabs.append(tag)
-    print(f"these are the selected tabs as a list:__")
+    print(f"these are the selected tabs as a list:{selected_tabs}")
     return selected_tabs
+
+def insert_data(dataset, selected_tags, tag_column_pairs):
+    """
+    Writes a unique sql query/INSERT string depeneding on tag# numbers
+    """
+    # forms query's first variable part.
+    query_string = ""
+    for tag in selected_tags:
+        if tag in tag_column_pairs:
+            query_string += f", '{tag_column_pairs[tag]}'"
+
+    # determines # of ?'s for place holders
+    values = ""
+    for tag in selected_tags:
+        values += f", ?"
+
+    # passes off variable tag values to dataset variable. MAKE SURE DATASET VAR CHANGED.
+    for tag in range(len(selected_tags)):
+        dataset.append(selected_tags.pop(0))
+
+    # inserts entry/tag info into the database for later retrieval
+    conn = connect_db("journ.db")
+    c = conn.cursor()
+    c.execute(f"INSERT into entries ('user_id', 'entry_url'{query_string}) VALUES (?, ?{values})",
+             dataset)
+    conn.commit()
+    conn.close()
