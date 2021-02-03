@@ -31,9 +31,12 @@ def after_request(response):
 # home page after login. | emphasizes ease of entry-writing
 @app.route("/", methods=["GET", "POST"])
 def home():
-    # retrieves user's tags data for use in either "POST" or "GET", and all_tag_column_pairs (key = tag, value = column#)
-    tags, all_tag_column_pairs = current_tags(user_id)
-    
+    # retrieves user's tags data for use in either "POST" or "GET" 
+    tags = current_tags(user_id)
+
+    # finds tag_column_pairs (key = tag, value = column#)
+    tag_column_pairs = helpers.find_tag_column_pairs(tags)
+
     # user submits a post to be recorded
     if request.method == "POST":
 
@@ -43,29 +46,17 @@ def home():
         # rejects blank entry   | move this to javascript on page. 
         if not request.form.get("entry"):
             return apology("No entry")
-        
-        # rejects multiple selected tabs. TODO: double-check to see if 2 would cause complications.
-        elif not len(selected_tabs) == 1:
-            return apology("this is beta; pick 1 tab & 1 only")
 
         # writes new entry and updates database
         else:
-            # saves entry as a file | uses username + utc microseconds to create unique name
-            entry_name = f"{user_id}_{time.time()}.txt"
-            entry = request.form.get("entry")
-            with open(fr"entries\{entry_name}", "w") as entry_writer:
-                entry_writer.write(entry)
+            # saves entry as a file, passes name of entry
+            entry_name = helpers.create_entry(user_id)
             
             # a list to put into SQL
-            dataset = [user_id, entry_name, selected_tabs[0]]
+            dataset = [user_id, entry_name]
 
-            # stores the info in the database
-            conn = connect_db("journ.db")
-            c = conn.cursor()
-            c.execute(f"INSERT into entries ('user_id', 'entry_url', {all_tag_column_pairs[selected_tabs[0]]}) VALUES (?, ?, ?)",
-                        dataset)
-            conn.commit()
-            conn.close()
+            # stores the info in the database   || move to function. consider a wrapper. 
+            helpers.insert_data(dataset, selected_tabs, tag_column_pairs)
 
             return redirect("/")
     else:
@@ -85,8 +76,11 @@ def tags():
     """
      user may see and change current tag information
     """
-    # retrieves user's tags data for use in either "POST" or "GET"
-    tags, all_tag_column_pairs = current_tags(user_id)
+    # retrieves user's tags data for use in either "POST" or "GET" 
+    tags = current_tags(user_id)
+    
+    # finds tag_column_pairs (key = tag, value = column#)
+    tag_column_pairs = helpers.find_tag_column_pairs(tags)
 
     # user may alter their tag-related data. || future project upgrade: javascript alerts to prevent needless reloading.
     if request.method == "POST":
