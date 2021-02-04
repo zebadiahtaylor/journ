@@ -111,7 +111,6 @@ def tags():
                 conn.close()
                 return redirect("/tags.html")
 
-        # replaces existing tag only
         # TODO clean this mess up
         # TODO prone to user error, use JS to disable buttons until submit
         elif request.form.get("newertag") and request.form.get("oldtag") and not request.form.get("replace_existing"):
@@ -132,20 +131,17 @@ def tags():
         elif request.form.get("newertag") and not request.form.get("oldtag"):
             return apology("choose a tag to replace")
 
-        # TODO replaces existing tag AND updates tags for all previous entries
-            # TODO
-
         else:
             return apology("entries required") 
-        # insert into SQL database
-        # update page
-        # return render_template("tags.html")
+
     else:  
         return render_template("tags.html", tags=tags)
 
 
 """
+
 etcetera. lifted from cs50 finance to help w/ debugging.  
+
 """
 def errorhandler(e):
     """Handle error"""

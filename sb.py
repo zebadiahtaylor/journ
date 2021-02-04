@@ -7,65 +7,58 @@ import re
 
 user_id = '1'
 
+"""
+get DATETIME IN LOCALTIME NOT GREENWICH
 
-# full_name = lambda fn, ln: fn.strip().title() + " " + ln.strip().title()
+https://sqlite.org/lang_datefunc.html
+https://stackoverflow.com/questions/381371/sqlite-current-timestamp-is-in-gmt-not-the-timezone-of-the-machine
+https://www.sqlite.org/lang_datefunc.html
+"""
 
-# print(full_name("   zEb", "TAtor"))
+# do the math in python, or have it converted in sql?
 
-# def create_entry(user_id):
-#     # uses username + utc microseconds to create unique name. TODO: improve for multiple simultaneous entries per user
-#     entry_name = f"{user_id}_{time.time()}.txt"
-#     entry = "fake fucking text. delete"
-#     with open(fr"entries\{entry_name}", "w") as entry_writer:
-#         entry_writer.write(entry)
-#     return entry_name
 
-# def save_to_db(dataset, all_tag_column_pairs):  
-#     conn = helpers.connect_db("journ.db")
+# def find_entry_info(user_id):
+#     """
+#     WE ARE HERE. TRANSLATE UTC TO LOCALTIME. CONSIDER HOW TO MAKE JOURNAL.HTML PRETTIER WHILE YOU'RE AT IT.
+#     Queries databases regarding users' entries and returns a pair of dictionaries.
+#     """
+#     entry_info = {}
+#     entry_tags = {}
+
+#     # makes dict w/ {entry_url:[date, time]}
+#     conn = connect_db("journ.db")
 #     c = conn.cursor()
-#     c.execute(f"INSERT into entries ('user_id', 'entry_url', {all_tag_column_pairs[selected_tabs[0]]}) VALUES (?, ?, ?)",
-#             dataset)
-#     conn.commit()
+#     data_handler = c.execute("SELECT entry_url,date,time FROM entries WHERE user_id=? ORDER BY date DESC, time DESC",
+#                 user_id)
+#     for row in data_handler:
+#         entry_info[row[0]]=[row[1], row[2]]
+    
+#     # adds entry text to entry_info >> {entry_url:[date,time,text]}
+#     for each_entry in entry_info.keys():
+#         with open(fr"entries\{each_entry}") as reader:
+#             reader = reader.read()
+#             entry_info[each_entry].append(reader)
+
+#     # makes dict w/ {entryname:[tags]}
+#     data_handler = c.execute("SELECT entry_url,tag1,tag2,tag3,tag4,tag5,tag6,tag7,tag8 FROM entries WHERE user_id=? ORDER BY date DESC, time DESC",
+#                 user_id)
+#     for row in data_handler:
+#         entry_tags[row[0]] = [i for i in row if i]
+#     for key in entry_tags.keys():
+#         del entry_tags[key][0]
+
 #     conn.close()
-"""
-figure out how to pass multiple tags to multiple tag column pairs over SQL. 
-"""
-"""
-this lambda syntax works.
-"""
-dataset = [user_id, "fake name", "all_tag_column_pairs"]
-def varied():
-    return "uh oh"
+#     return entry_info, entry_tags
 
-g = lambda: varied()
-print(f"all my love {g()}")
 
-print(f"INSERT into entries ('user_id', 'entry_url', {varied()}) VALUES (?, ?, ?)",
-             dataset)
+entry_info = {}
 
-# write function that generates tag column names as strings separated by commas for use in a sql string.
-# challenge: the ?? after VALUES and the dataset itself must be flexible.
-# dataset probably already is
-
-#simulated vars
-tag_column_pairs = {'dev':'tag4', 'life': 'tag1', 'journ':'tag8'}
-selected_tags = ['dev', 'life', 'journ']
-dataset = [user_id, "fake name"]  # WATCH OUT FOR
-
-def insert_data(dataset, selected_tags, tag_column_pairs):
-    # forms query's first variable part.
-    query_string = ""
-    for tag in selected_tags:
-        if tag in tag_column_pairs:
-            query_string += f", '{tag_column_pairs[tag]}'"
-    # determines # of ?'s for place holders
-    values = ""
-    for tag in selected_tags:
-        values += f", ?"
-    # passes off variable tag values to dataset variable. MAKE SURE DATASET VAR CHANGED.
-    for tag in range(len(selected_tags)):
-        dataset.append(selected_tags.pop(0))
-    print(f"INSERT into entries ('user_id', 'entry_url'{query_string}) VALUES (?, ?{values})",
-             dataset)
-
-insert_data(dataset, selected_tags, tag_column_pairs)
+conn = helpers.connect_db("journ.db")
+c = conn.cursor()
+data_handler = c.execute("SELECT entry_url,date('localtime'),time FROM entries WHERE user_id=? ORDER BY date DESC, time DESC",
+            user_id)
+for row in data_handler:
+    entry_info[row[0]]=[row[1], row[2]]
+    print(entry_info[row[0]])
+conn.close()

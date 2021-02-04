@@ -8,15 +8,16 @@ considerations
 JOURN to do general
 
     DB TIMESTAMPS ARE COMPLETELY WRONG. 
-        EVENTUALLY GET THIS TO WORK BY TIMEZONE. 
-    Multiple tags
-    delete entries
+        They're not wrong, they're just in UTC. Alter on return.  
+    use wrappers to open and close databases and avoid repeat code?
+    delete entries  // what happens to db? will this make ORDER BY queries more expensive?
     order by tag options
     refresh w/ javascript?
     figure out server-side storage
     SQLITE
     user-specific content
     additional features:
+
     
     on website
     in databases
@@ -52,7 +53,8 @@ sqlite3.OperationalError: near "=": syntax error
     5. # todo clean up 
         a. connections with more functions from helpers
 
-
+completed
+    _multiple tags allowed
 
 Pattern.fullmatch(string[, pos[, endpos]])
 If the whole string matches this regular expression, return a corresponding match object. Return None if the string does not match the pattern; note that this is different from a zero-length match.

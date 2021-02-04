@@ -19,20 +19,10 @@ def apology(message, code=400):
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
-
-def connect_db(path):
-    connection = None
-    try:
-        connection = sqlite3.connect(path)
-        print("data_base accessed")
-    except:
-        print("problem connecting with database")
-    return connection
-
-# returns list of tags and dict w/ tags(keys) and columns (values)
 def current_tags(user_id):
-    
-    # finds current tags and returns tags []
+    """
+    returns list of tags and dict w/ tags(keys) and columns (values)
+    """
     tags= []
     conn = connect_db("journ.db")
     dbtags = conn.execute("SELECT tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8 FROM tags WHERE user_id=?",
@@ -41,13 +31,28 @@ def current_tags(user_id):
     for row in dbtags:
         for item in row:
             tags.append(item)
-    print(f"the tags are: {tags}")
-    conn.close()
 
+    conn.close()
     return tags
 
+def connect_db(path):
+    """
+    connects to the database. 
+    what if we updated this as a wrapper around other functions that use it?
+    """
+    connection = None
+    try:
+        connection = sqlite3.connect(path)
+        print("data_base accessed")
+    except:
+        print("problem connecting with database")
+    return connection
+
 def create_entry(user_id):
-    # uses username + utc microseconds to create unique name. TODO: improve for multiple simultaneous entries per user
+    """
+    uses username + utc microseconds to create unique name. 
+    TODO: improve for multiple simultaneous entries per user
+    """
     entry_name = f"{user_id}_{time.time()}.txt"
     entry = request.form.get("entry")
     with open(fr"entries\{entry_name}", "w") as entry_writer:
@@ -56,14 +61,15 @@ def create_entry(user_id):
 
 def find_entry_info(user_id):
     """
+    WE ARE HERE. TRANSLATE UTC TO LOCALTIME. CONSIDER HOW TO MAKE JOURNAL.HTML PRETTIER WHILE YOU'RE AT IT.
     Queries databases regarding users' entries and returns a pair of dictionaries.
     """
     entry_info = {}
     entry_tags = {}
-    conn = connect_db("journ.db")
-    c = conn.cursor()
 
     # makes dict w/ {entry_url:[date, time]}
+    conn = connect_db("journ.db")
+    c = conn.cursor()
     data_handler = c.execute("SELECT entry_url,date,time FROM entries WHERE user_id=? ORDER BY date DESC, time DESC",
                 user_id)
     for row in data_handler:
@@ -87,6 +93,9 @@ def find_entry_info(user_id):
     return entry_info, entry_tags
 
 def find_free_tag_column(tags):
+    """
+    User adds an additional tag. Finds first tag column with NULL, creates name, and passes it. 
+    """
     that_tag_column = ""
     counter = 0
     for tag in tags:
@@ -120,8 +129,11 @@ def find_tag_column_pairs(tags):
     print(f"all_tag_columns = {all_tag_columns}")
     return all_tag_columns
 
-# checks what tags are turned on
+
 def get_selected_tags(tags):
+    """
+    checks what tags are turned on
+    """
     users_tags = {}
     selected_tabs = []
     for tag in tags:
