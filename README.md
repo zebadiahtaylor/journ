@@ -100,7 +100,4 @@ Developed in VSCODE.
 
 #### Thanks 
 
-Thanks to David Malan and the cs50 staff, grumpy cat, stackoverflow and its many contributors, Jace Browning, Al Sweigart, and most of all, my wife. 
-
-No thanks to my animals, who require too much petting at inconvenient times. They will continue receiving lots of petting.
-
+Thanks to David Malan and the cs50 staff, grumpy cat, Cameron M., Stackoverflow and its many contributors, Jace Browning, Al Sweigart, and most of all, my wife.
