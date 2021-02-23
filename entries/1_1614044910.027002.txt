@@ -1,1 +1,3 @@
 Welcome to journ, the 📓 journaling 📓 webapp. 
+
+Checking if working
