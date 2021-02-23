@@ -1,4 +1,3 @@
-
 from flask import render_template, request
 import sqlite3
 from sqlite3 import Error
@@ -50,7 +49,7 @@ def create_entry(user_id):
     # uses username + utc microseconds to create unique name. TODO: improve for multiple simultaneous entries per user
     entry_name = f"{user_id}_{time.time()}.txt"
     entry = request.form.get("entry")
-    with open(fr"entries\{entry_name}", "w") as entry_writer:
+    with open(fr"entries/{entry_name}", "w") as entry_writer:
         entry_writer.write(entry)
     return entry_name
 
@@ -69,11 +68,23 @@ def find_entry_info(user_id):
     for row in data_handler:
         entry_info[row[0]]=[row[1], row[2]]
     
+
     # adds entry text to entry_info >> {entry_url:[date,time,text]}
+    """
+    add try / and on except deletes date info from entry_info
+    """
+    missing_entries = [] # for handling FileNotFile errors for missing entries
     for each_entry in entry_info.keys():
-        with open(fr"entries\{each_entry}") as reader:
-            reader = reader.read()
-            entry_info[each_entry].append(reader)
+        try:
+            with open(fr"entries/{each_entry}") as reader:
+                reader = reader.read()
+                entry_info[each_entry].append(reader)
+        except FileNotFoundError:
+            missing_entries.append(each_entry)
+
+    for each_entry in missing_entries:
+        del entry_info[each_entry]
+
 
     # makes dict w/ {entryname:[tags]}
     data_handler = c.execute("SELECT entry_url,tag1,tag2,tag3,tag4,tag5,tag6,tag7,tag8 FROM entries WHERE user_id=? ORDER BY date DESC, time DESC",

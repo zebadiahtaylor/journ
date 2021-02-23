@@ -22,6 +22,9 @@ journ is a basic journaling app with advanced organization options and scalabili
 - Ease of use and online access.
 - More security. 
 
+
+
+
 #### HOW TO USE
 1. At the command line, navigate to the folder in which app.py is stored
 2. type pip3 install flask

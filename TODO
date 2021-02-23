@@ -7,9 +7,11 @@ considerations
 
 JOURN to do general
 
+    optimize pathfiles for mac os / handle FileNotFoundError
+    Create a sample database and set of entries for multiple users
     DB TIMESTAMPS ARE COMPLETELY WRONG. 
         EVENTUALLY GET THIS TO WORK BY TIMEZONE. 
-    Multiple tags
+    get a nicer font in there. "open sans" for example is free
     delete entries
     order by tag options
     refresh w/ javascript?

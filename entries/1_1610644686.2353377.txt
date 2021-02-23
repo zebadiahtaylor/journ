@@ -1,1 +1,1 @@
-whatever you want to write
+It was initially written by Zebadiah Taylor as a final project for cs50 @ edx.org
