@@ -7,13 +7,17 @@ considerations
 
 JOURN to do general
 
-    optimize pathfiles for mac os / handle FileNotFoundError
+    db management tool for mac
+    revert to previous version (for deleted file)
     Create a sample database and set of entries for multiple users
-    DB TIMESTAMPS ARE COMPLETELY WRONG. 
-        EVENTUALLY GET THIS TO WORK BY TIMEZONE. 
+    get entries / old data_base from ZEBSPC
     get a nicer font in there. "open sans" for example is free
+    DB TIMESTAMPS ARE in GMT. 
+        EVENTUALLY GET THIS TO WORK BY TIMEZONE.
+        Perhaps grab timezone at time of entry. 
     delete entries
     order by tag options
+    data visualization 
     refresh w/ javascript?
     figure out server-side storage
     SQLITE
