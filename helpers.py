@@ -19,6 +19,32 @@ def apology(message, code=400):
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
+<<<<<<< Updated upstream
+=======
+
+"""
+Trying to create a wrapper function to remove repeated code from other functions
+"""
+def db_handler(helper):
+    connection = None
+    try:
+        connection = sqlite3.connect(path)
+        print("db accessed")
+    except:
+        print("Something happened ¯\_(ツ)_/¯ Release the hounds!")
+    
+        
+def connect_db(path):
+    connection = None
+    try:
+        connection = sqlite3.connect(path)
+        print("data_base accessed")
+    except:
+        print("problem connecting with database")
+    return connection
+
+# returns list of tags and dict w/ tags(keys) and columns (values)
+>>>>>>> Stashed changes
 def current_tags(user_id):
     """
     returns list of tags and dict w/ tags(keys) and columns (values)
