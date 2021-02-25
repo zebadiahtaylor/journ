@@ -7,44 +7,35 @@ considerations
 
 JOURN to do general
 
-    db management tool for mac
-    revert to previous version (for deleted file)
-    Create a sample database and set of entries for multiple users
-    get entries / old data_base from ZEBSPC
-    get a nicer font in there. "open sans" for example is free
+    Error in app.py regarding changing tags. possibly from switching to with syntax
+    format sql queries???
     DB TIMESTAMPS ARE in GMT. 
         EVENTUALLY GET THIS TO WORK BY TIMEZONE.
         Perhaps grab timezone at time of entry. 
-    delete entries
+    delete entries  // update entries // update tags for entries
     order by tag options
     data visualization 
-    refresh w/ javascript?
+    include location data >>> you'll have to cut the db entirely from github 
+        or risk handing out your address. 
+    javascript functionality, like dark-mode, etc. use db to save prefs.
+        eventually work out the apology() page & function
     figure out server-side storage
     SQLITE
-    user-specific content
+    user-specific content((???? 🤷‍♂️))
     additional features:
-    
+        'make public' option for entries
     on website
     in databases
     search
     user log_in information
-    use database to keep user preferences ('night mode', etc.)
      1. (nonessent) javascript: alert user if naming conventions are violated:
         letters a-z only and spaces only, no exceptions | must have at least 1 letter
         minimum 1 letter. what maximum?
     questions to ask: is using utc time a good way to create a unique identifier for a text file to prevent overwrites?
 
-todo:
-   1. debug: NULL IN DB NOT WORKING AS EXPECTED
-    File "C:\Users\zebad\Projects\journ\app.py", line 130, in tags
-    c.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id=?", db_info)
-sqlite3.OperationalError: near "=": syntax error
 
 
-    2. code for @route("tags.html")
-        c. if update previous entries?
-            +db update 
-                question: is giving user potential infinite tags problematic? 
+    question: is giving user potential infinite tags problematic? 
     3. code for index (entry)
         a. take user input and create a document w/ unique title?
                 q. how do this? using user_id and 
@@ -72,3 +63,7 @@ The optional pos and endpos parameters have the same meaning as for the search()
 >>> pattern.fullmatch("doggie", 1, 3)   # Matches within given limits.
 <re.Match object; span=(1, 3), match='og'>
 New in version 3.4.
+
+
+CANCELED TODO:
+wraps for db access

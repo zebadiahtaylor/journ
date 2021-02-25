@@ -63,3 +63,19 @@ SET column1 = value1, column2 = value2, ...
 WHERE condition;
 
 SELECT entry_url FROM entries WHERE use_id=?
+
+
+
+1	1_1610643117.6156711.txt					
+1	1_1610643975.6611331.txt	
+1	1_1610644146.1956991.txt	
+1	1_1614044910.027001.txt	
+INSERT into entries ('user_id','entry_url', 'tag4', 'tag8') 
+VALUES (1, '1_1610644146.1956991.txt', 'dev', 'journ');
+ 
+
+debugging:   File "/Users/zebadiahtaylor/projects/journ/helpers.py", line 195, in handle_replace_tag_request
+    conn.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id = ?", db_info)
+    sqlite3.OperationalError: near "=": syntax error
+
+UPDATE tags SET {tag_column} = ? WHERE user_id = ?", db_info

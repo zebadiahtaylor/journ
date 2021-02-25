@@ -34,30 +34,19 @@ def home():
     # retrieves user's tags data for use in either "POST" or "GET" 
     tags = current_tags(user_id)
 
-    # finds tag_column_pairs (key = tag, value = column#)
+    # finds tag_column_pairs (key = tag, value = column_name)
     tag_column_pairs = helpers.find_tag_column_pairs(tags)
 
     # user submits a post to be recorded
     if request.method == "POST":
 
-        # a list of the user's selected tabs | currently, we only use 1
-        selected_tabs = helpers.get_selected_tags(tags)
-
-        # rejects blank entry   | move this to javascript on page. 
+        # rejects blank entry   | TODO move this to javascript on page. 
         if not request.form.get("entry"):
-            return apology("No entry")
+            return apology("You must type something to make an entry")
 
         # writes new entry and updates database
         else:
-            # saves entry as a file, passes name of entry
-            entry_name = helpers.create_entry(user_id)
-            
-            # a list to put into SQL
-            dataset = [user_id, entry_name]
-
-            # stores the info in the database   || move to function. consider a wrapper. 
-            helpers.insert_data(dataset, selected_tabs, tag_column_pairs)
-
+            helpers.write_new_entry(user_id, tags, tag_column_pairs)
             return redirect("/")
     else:
         return render_template("index.html", tags=tags)
@@ -85,47 +74,19 @@ def tags():
     # user may alter their tag-related data. || future project upgrade: javascript alerts to prevent needless reloading.
     if request.method == "POST":
 
-        # user adds a new tag
         if request.form.get("newtag"):
 
-            # converts to valid tags (spaces and letters)
-            newtag = re.sub(r'[^A-Za-z0-9]+', '', request.form.get("newtag"))
-
-            # checks to make sure tag limit hasn't been exhausted || upgrade: add alert in javascript.  
-            if None not in tags:
-                return apology("8 tag limit. try to change a tag instead.")
-
-            # finds first empty spot and returns column name
-            else:
-                tag_column = helpers.find_free_tag_column(tags)
-
-                # AND inserts the information into the databases
-                db_info = [newtag, user_id]
-
-                conn = connect_db("journ.db")
-                c = conn.cursor()
-
-                c.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id = ?", db_info)
-                
-                conn.commit()
-                conn.close()
+            if helpers.handle_newtag_request(tags, user_id):
                 return redirect("/tags.html")
 
-        # replaces existing tag only
-        # TODO clean this mess up
-        # TODO prone to user error, use JS to disable buttons until submit
-        elif request.form.get("newertag") and request.form.get("oldtag") and not request.form.get("replace_existing"):
-            newertag = re.sub(r'[^A-Za-z0-9 ]+', '', request.form.get("newertag"))
-            oldtag = request.form.get("oldtag")
-            tag_column = str(find_tag_column(tags, oldtag))
-            db_info = [newertag, user_id]
+            else: 
+                return apology("8 tag limit. try to change a tag instead.")
 
-            conn = connect_db("journ.db")
-            c = conn.cursor()
-            c.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id = ?", db_info)
+        # replaces existing tag
+        # TODO prone to user error, TODO use JS to disable buttons until submit
+        elif request.form.get("newertag") and request.form.get("oldtag"):
+            helpers.handle_replace_tag_request(user_id, tags)
 
-            conn.commit()
-            conn.close()
             return redirect("/tags.html")
 
         # handles a user error
@@ -134,12 +95,8 @@ def tags():
 
         # TODO replaces existing tag AND updates tags for all previous entries
             # TODO
-
         else:
             return apology("entries required") 
-        # insert into SQL database
-        # update page
-        # return render_template("tags.html")
     else:  
         return render_template("tags.html", tags=tags)
 
