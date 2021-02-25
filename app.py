@@ -10,9 +10,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 
 app = Flask(__name__)
 
-# db = connect_db("journ.db")
-
-# for development only
+# For development only
 user_id = '1'
 
 # Ensure templates are auto-reloaded
@@ -26,23 +24,23 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-# home page after login. | emphasizes ease of entry-writing
+# Home page after login.
 @app.route("/", methods=["GET", "POST"])
 def home():
-    # retrieves user's tags data for use in either "POST" or "GET" 
+    # Retrieves user's tags data for use in either "POST" or "GET" 
     tags = current_tags(user_id)
 
-    # finds tag_column_pairs (key = tag, value = column_name)
+    # Finds tag_column_pairs (key = tag, value = column_name)
     tag_column_pairs = helpers.find_tag_column_pairs(tags)
 
-    # user submits a post to be recorded
+    # User submits a post to be recorded
     if request.method == "POST":
 
-        # rejects blank entry   | TODO move this to javascript on page. 
+        # Rejects blank entry   | TODO move this to javascript on page. 
         if not request.form.get("entry"):
             return apology("You must type something to make an entry")
 
-        # writes new entry and updates database
+        # Writes new entry and updates database
         else:
             helpers.write_new_entry(user_id, tags, tag_column_pairs)
             return redirect("/")
@@ -52,7 +50,7 @@ def home():
 @app.route("/journal.html", methods=["GET", "POST"])
 def journal():
     if request.method == "GET":
-        # retrieves entries' urls, dates, & times
+        # Retrieves entries' urls, dates, & times
         entry_info, entry_tags = helpers.find_entry_info(user_id)
 
         return render_template("journal.html", entry_info=entry_info, entry_tags=entry_tags)
@@ -63,10 +61,10 @@ def tags():
     """
      user may see and change current tag information
     """
-    # retrieves user's tags data for use in either "POST" or "GET" 
+    # Retrieves user's tags data for use in either "POST" or "GET" 
     tags = current_tags(user_id)
 
-    # user may alter their tag-related data. || future project upgrade: javascript alerts to prevent needless reloading.
+    # User alters tag-related data.
     if request.method == "POST":
 
         if request.form.get("newtag"):
@@ -77,24 +75,20 @@ def tags():
             else: 
                 return apology("8 tag limit. try to change a tag instead.")
 
-        # replaces existing tag
-        # TODO prone to user error, TODO use JS to disable buttons until submit
+        # Replaces existing tag # TODO use JS to disable buttons until submit
         elif request.form.get("newertag") and request.form.get("oldtag"):
             helpers.handle_replace_tag_request(user_id, tags)
 
             return redirect("/tags.html")
 
-        # handles a user error
+        # Handles a user error
         elif request.form.get("newertag") and not request.form.get("oldtag"):
             return apology("choose a tag to replace")
 
-        # TODO replaces existing tag AND updates tags for all previous entries
-            # TODO
         else:
             return apology("entries required") 
     else:  
         return render_template("tags.html", tags=tags)
-
 
 """
 etcetera. lifted from cs50 finance to help w/ debugging.  

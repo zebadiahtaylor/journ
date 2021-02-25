@@ -27,7 +27,8 @@ def current_tags(user_id):
     """
     tags= []
     with sqlite3.connect("journ.db") as conn:
-        dbtags = conn.execute("SELECT tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8 FROM tags WHERE user_id=?",
+        dbtags = conn.execute("SELECT tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8 " 
+                            f"FROM tags WHERE user_id=?",
                             user_id
                             )
     for row in dbtags:
@@ -57,7 +58,10 @@ def find_entry_info(user_id):
 
     # makes dict w/ {entry_url:[date, time]}
     with sqlite3.connect("journ.db") as conn:
-        data_handler = conn.execute("SELECT entry_url,date,time FROM entries WHERE user_id=? ORDER BY date DESC, time DESC",
+        data_handler = conn.execute("SELECT entry_url,date,time "
+                        "FROM entries "
+                        "WHERE user_id=? "
+                        "ORDER BY date DESC, time DESC",
                     user_id)
     for row in data_handler:
         entry_info[row[0]]=[row[1], row[2]]
@@ -78,8 +82,11 @@ def find_entry_info(user_id):
         del entry_info[each_entry]
 
     # Makes dict called entry_tags: {entryname:[tags]}
-    data_handler = conn.execute("SELECT entry_url,tag1,tag2,tag3,tag4,tag5,tag6,tag7,tag8 FROM entries WHERE user_id=? ORDER BY date DESC, time DESC",
-                user_id)
+    data_handler = conn.execute("SELECT entry_url,tag1,tag2,tag3,tag4,tag5,tag6,tag7,tag8 "
+                                "FROM entries "
+                                "WHERE user_id=? "
+                                "ORDER BY date DESC, time DESC",
+                                user_id)
     for row in data_handler:
         entry_tags[row[0]] = [i for i in row if i]
     for key in entry_tags.keys():
@@ -162,7 +169,9 @@ def handle_newtag_request(tags, user_id):
             db_info = [newtag, user_id]
 
             with sqlite3.connect("journ.db") as conn:
-                conn.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id = ?",
+                conn.execute(f"UPDATE tags "
+                            f"SET {tag_column} = ? "
+                            f"WHERE user_id = ?",
                     db_info
                     )
             
@@ -178,7 +187,11 @@ def handle_replace_tag_request(user_id, tags):
     db_info = [newertag, user_id]
 
     with sqlite3.connect("journ.db") as conn:
-        conn.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id = ?", db_info)
+        conn.execute(f"UPDATE tags "
+                    f"SET {tag_column} = ? "
+                    f"WHERE user_id = ?", 
+                    db_info
+                    )
 
 def insert_data(dataset, selected_tags, tag_column_pairs):
     """
@@ -201,8 +214,11 @@ def insert_data(dataset, selected_tags, tag_column_pairs):
 
     # inserts entry/tag info into the database for later retrieval
     with sqlite3.connect("journ.db") as conn:
-        conn.execute(f"INSERT into entries ('user_id', 'entry_url'{query_string}) VALUES (?, ?{values})",
-                dataset)
+        conn.execute(f"INSERT into entries "
+                    f"('user_id', 'entry_url'{query_string}) "
+                    f"VALUES (?, ?{values})",
+                    dataset
+                    )
 
 def write_new_entry(user_id, tags, tag_column_pairs):
     """

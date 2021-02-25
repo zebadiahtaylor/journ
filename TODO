@@ -7,7 +7,6 @@ considerations
 
 JOURN to do general
 
-    Error in app.py regarding changing tags. possibly from switching to with syntax
     format sql queries???
     DB TIMESTAMPS ARE in GMT. 
         EVENTUALLY GET THIS TO WORK BY TIMEZONE.
