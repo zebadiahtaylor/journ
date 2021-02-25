@@ -65,9 +65,6 @@ def tags():
     """
     # retrieves user's tags data for use in either "POST" or "GET" 
     tags = current_tags(user_id)
-    
-    # finds tag_column_pairs (key = tag, value = column#)
-    tag_column_pairs = helpers.find_tag_column_pairs(tags)
 
     # user may alter their tag-related data. || future project upgrade: javascript alerts to prevent needless reloading.
     if request.method == "POST":
