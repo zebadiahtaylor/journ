@@ -1,13 +1,11 @@
 """
 journ
 a personal app for journaling
-by zebadiah s. taylor dec 2020, for cs50
+by zebadiah s. taylor dec 2020 / 2021
 """
 from flask import Flask, flash, render_template, redirect, request, session
 import helpers
-from helpers import apology, connect_db, current_tags, find_tag_column
-import re
-import time
+from helpers import apology, current_tags, find_tag_column
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 
 app = Flask(__name__)

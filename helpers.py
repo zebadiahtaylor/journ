@@ -21,18 +21,6 @@ def apology(message, code=400):
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
-def connect_db(path):
-    """
-    TODO CUT!!!
-    opens connection to the database
-    """
-    connection = None
-    try:
-        connection = sqlite3.connect(path)
-    except:
-        print("problem connecting with database")
-    return connection
-
 def current_tags(user_id):
     """
     finds & returns list of user's tags
@@ -181,16 +169,14 @@ def handle_newtag_request(tags, user_id):
             return True
 
 def handle_replace_tag_request(user_id, tags):
+    """
+    User replaces an old tag with a new(er) tag. 
+    """
     newertag = re.sub(r'[^A-Za-z0-9 ]+', '', request.form.get("newertag"))
-    print(f"the newertag is {newertag}")
     oldtag = request.form.get("oldtag")
-    print(f"the older tag is {oldtag}")
-    tag_column = str(find_tag_column(tags, str(oldtag)))
-    print(f"the tags are {tags}")
-    print(f"the tag_column is {tag_column}")
+    tag_column = str(find_tag_column(tags, oldtag))
     db_info = [newertag, user_id]
-    print(f"the db_info is {db_info}")
-    
+
     with sqlite3.connect("journ.db") as conn:
         conn.execute(f"UPDATE tags SET {tag_column} = ? WHERE user_id = ?", db_info)
 
