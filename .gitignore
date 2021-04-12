@@ -2,3 +2,4 @@ journ.db
 journ.sqbpro
 sb.py
 entries/
+__pycache__
