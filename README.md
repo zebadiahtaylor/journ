@@ -13,7 +13,7 @@ journ is a basic journaling app with advanced organization options and scalabili
 - Offline access!
 - Free!
 
-#### Upcoming features:
+#### Possible Upcoming Features:
 - Multiple users and cloud-based availability
 - Rich-text support.
 - Night-mode | day mode options. 
